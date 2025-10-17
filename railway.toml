@@ -1,0 +1,8 @@
+[deploy]
+start = "python informe_tecnico_web_app.py"
+
+[build]
+builder = "nixpacks"
+
+[variables]
+PORT = "8000"
