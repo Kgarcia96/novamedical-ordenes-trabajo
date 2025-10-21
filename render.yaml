@@ -1,13 +1,15 @@
 services:
   - type: web
-    name: novamedical-ordenes-trabajo
+    name: novamedical-ordenes-trabajo-1
     env: python
-    buildCommand: pip install -r requeriments.txt
+    python:
+      version: 3.11.0
+    buildCommand: pip install -r requirements.txt
     startCommand: gunicorn informe_tecnico_web_app:app
     envVars:
       - key: FLASK_ENV
         value: production
       - key: SECRET_KEY
-        value: 8d7f4a2e9c1b6f3a8e5d2c7b9a4f1e6d8c3b7a5e9f2d1c6b8a4e7f3c9a5d2b8
+        generateValue: true
       - key: RENDER
         value: true
