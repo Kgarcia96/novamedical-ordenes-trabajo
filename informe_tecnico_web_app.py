@@ -1820,25 +1820,36 @@ def health_check():
         }, 500
 
 # --- Run ---
+# --- Configuración para Railway ---
 if __name__ == '__main__':
-    # Recrear la base de datos con la nueva estructura
-    recreate_database()
-    verify_database_structure()
+    logger.info("🚀 Iniciando Novamedical Orders en Railway")
+    logger.info(f"📁 Directorio de trabajo: {os.getcwd()}")
+    logger.info(f"🗄️ Base de datos: {config.DB_FILE}")
     
-    logger.info("Iniciando aplicación de Órdenes de Trabajo Novamedical")
-    logger.info(f"Directorio de BD: {config.DB_FILE}")
-    logger.info(f"Directorio de uploads: {config.UPLOADS_DIR}")
-    logger.info(f"Directorio de PDFs: {config.PDF_DIR}")
+    # Verificar estructura de base de datos
+    try:
+        verify_database_structure()
+    except Exception as e:
+        logger.error(f"Error verificando BD: {e}")
     
-    if config.SMTP_HOST and config.SMTP_HOST != 'smtp.example.com':
-        logger.info("SMTP configurado para envío de emails")
-    else:
-        logger.warning("SMTP no configurado - el envío por email no funcionará")
+    # Configuración específica para Railway
+    port = int(os.environ.get('PORT', 5000))
+    host = '0.0.0.0'  # CRÍTICO para Railway
     
-    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    logger.info(f"🌐 Servidor iniciando en: {host}:{port}")
     
+    # Verificar si el logo existe
+    try:
+        if os.path.exists("novamedical.png"):
+            logger.info("✅ Logo encontrado")
+        else:
+            logger.warning("⚠️ Logo no encontrado")
+    except:
+        logger.warning("⚠️ No se pudo verificar el logo")
+    
+    # Iniciar servidor
     app.run(
-        debug=debug_mode,
-        host=os.environ.get('FLASK_HOST', '0.0.0.0'),
-        port=int(os.environ.get('FLASK_PORT', '5000'))
+        host=host,
+        port=port,
+        debug=False  # Siempre False en producción
     )
