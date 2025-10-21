@@ -21,6 +21,16 @@ from PIL import Image
 import smtplib
 from email.message import EmailMessage
 
+import os
+# Usar PostgreSQL en producción, SQLite en desarrollo
+if os.environ.get('RENDER'):
+    import psycopg2
+    # Configuración para PostgreSQL
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+else:
+    # SQLite para desarrollo
+    DATABASE_URL = 'sqlite:///informes.db'
+
 # --- Configuración Mejorada ---
 @dataclass
 class Config:
