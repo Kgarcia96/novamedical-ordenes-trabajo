@@ -4,7 +4,7 @@ services:
     env: python
     python:
       version: 3.11.0
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install flask==2.2.5 gunicorn==20.1.0 reportlab==3.6.13 pillow==10.2.0
     startCommand: gunicorn informe_tecnico_web_app:app
     envVars:
       - key: FLASK_ENV
