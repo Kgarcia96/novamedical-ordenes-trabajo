@@ -1337,9 +1337,30 @@ def generate_pdf(path, data):
         
         # ===== ENCABEZADO PROFESIONAL =====
         try:
-            c.drawImage("C:/Users/Novam/Downloads/Informe_novamedical/novamedical.png", margin -10, y - 70, width=100, height=100)
-        except:
-            pass
+    # Intentar cargar el logo desde diferentes ubicaciones
+    logo_paths = [
+        "novamedical.png",  # En el mismo directorio
+        "./novamedical.png",  # En directorio actual
+        "/opt/render/project/src/novamedical.png"  # En Render
+    ]
+    
+    logo_found = False
+    for logo_path in logo_paths:
+        if os.path.exists(logo_path):
+            c.drawImage(logo_path, margin -10, y - 70, width=100, height=100)
+            logo_found = True
+            break
+    
+    if not logo_found:
+        # Dibujar un rectángulo como placeholder si no se encuentra el logo
+        c.rect(margin -10, y - 70, 100, 100)
+        c.drawString(margin, y - 40, "LOGO")
+        
+except Exception as e:
+    # Si falla, simplemente continuar sin logo
+    logger.warning(f"Logo no encontrado: {str(e)}")
+    c.rect(margin -10, y - 70, 100, 100)
+    c.drawString(margin, y - 40, "NOVAMEDICAL")
         
         c.setFont('Helvetica-Bold', 14)
         c.drawString(margin + 80, y, 'NOVAMEDICAL CHILE LTDA')
